@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('notified_80')->default(false);
             $table->boolean('notified_100')->default(false);
             $table->timestamps();
+
+            $table->unique(['user_id', 'category_id', 'month', 'year']);
         });
     }
 
