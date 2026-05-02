@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
             'name' => $this->faker->word(),
             'type' => $this->faker->randomElement([Category::TYPE_INCOME, Category::TYPE_EXPENSE]),
             'color' => $this->faker->hexColor(),
-            'icon' => 'bi-tag',
+            'icon' => $this->faker->randomElement(['bi-tag', 'bi-cart', 'bi-house', 'bi-receipt', 'bi-wallet', 'bi-bag']),
         ];
     }
 
