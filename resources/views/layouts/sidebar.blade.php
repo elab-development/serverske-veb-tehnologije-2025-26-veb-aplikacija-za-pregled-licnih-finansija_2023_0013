@@ -4,7 +4,10 @@
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     class="fixed inset-y-0 left-0 z-40 w-60 bg-white border-r border-app-border flex flex-col transform transition-transform lg:translate-x-0">
 
-    <div class="h-16 flex items-center px-6 border-b border-app-border">
+    <div class="h-16 flex items-center gap-2 px-6 border-b border-app-border">
+        <div class="w-8 h-8 rounded-lg bg-app-accent text-white flex items-center justify-center">
+            <i class="bi bi-wallet2"></i>
+        </div>
         <span class="text-lg font-semibold text-app-text">Licne finansije</span>
     </div>
 
