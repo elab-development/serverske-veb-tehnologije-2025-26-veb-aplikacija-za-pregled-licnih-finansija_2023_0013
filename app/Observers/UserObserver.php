@@ -11,7 +11,7 @@ class UserObserver
     {
     }
 
-    public function creating(User $user): void
+    public function created(User $user): void
     {
         $this->seedDefaults->handle($user);
     }
