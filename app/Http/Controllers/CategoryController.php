@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         $request->user()->categories()->create($request->validated());
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'Kategorija je dodata.');
     }
 
     public function edit(Category $category): View
@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
         $category->update($request->validated());
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'Kategorija je izmenjena.');
     }
 
     public function destroy(Category $category): RedirectResponse
