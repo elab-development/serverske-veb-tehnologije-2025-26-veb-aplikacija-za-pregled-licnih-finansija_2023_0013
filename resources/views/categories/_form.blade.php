@@ -23,11 +23,13 @@
         @error('type') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
     </div>
 
-    <div>
+    <div x-data="{ color: '{{ old('color', $category->color ?? '#2563EB') }}' }">
         <label class="block text-sm font-medium mb-1">Boja</label>
-        <input type="text" name="color" value="{{ old('color', $category->color ?? '#2563EB') }}" required
-               placeholder="#2563EB"
-               class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
+        <div class="flex items-center gap-2">
+            <input type="color" x-model="color" class="w-12 h-10 border border-app-border rounded-lg cursor-pointer">
+            <input type="text" name="color" x-model="color" required pattern="^#[0-9A-Fa-f]{6}$"
+                   class="flex-1 px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent font-mono">
+        </div>
         @error('color') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
     </div>
 
