@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,16 +24,9 @@ class CategoryController extends Controller
         return view('categories.create', ['category' => new Category()]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CategoryRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:100',
-            'type' => 'required|in:income,expense',
-            'color' => 'required|string|size:7',
-            'icon' => 'nullable|string|max:50',
-        ]);
-
-        $request->user()->categories()->create($data);
+        $request->user()->categories()->create($request->validated());
 
         return redirect()->route('categories.index');
     }
@@ -44,18 +38,11 @@ class CategoryController extends Controller
         return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
         Gate::authorize('update', $category);
 
-        $data = $request->validate([
-            'name' => 'required|string|max:100',
-            'type' => 'required|in:income,expense',
-            'color' => 'required|string|size:7',
-            'icon' => 'nullable|string|max:50',
-        ]);
-
-        $category->update($data);
+        $category->update($request->validated());
 
         return redirect()->route('categories.index');
     }
