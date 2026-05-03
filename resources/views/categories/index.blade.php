@@ -24,10 +24,10 @@
                                     <a href="{{ route('categories.edit', $category) }}" class="text-app-text-muted hover:text-app-text">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('categories.destroy', $category) }}" class="inline" onsubmit="return confirm('Obrisati kategoriju {{ $category->name }}?')">
+                                    <form method="POST" action="{{ route('categories.destroy', $category) }}" class="inline category-delete-form" onsubmit="return confirm('Da li ste sigurni da zelite da obrisete kategoriju &quot;{{ $category->name }}&quot;?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-app-text-muted hover:text-app-negative">
+                                        <button type="submit" class="text-app-text-muted hover:text-app-negative delete-category-btn" title="Obrisi kategoriju">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
