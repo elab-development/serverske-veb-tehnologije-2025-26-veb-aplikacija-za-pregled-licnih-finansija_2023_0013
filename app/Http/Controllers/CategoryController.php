@@ -51,8 +51,15 @@ class CategoryController extends Controller
     {
         Gate::authorize('delete', $category);
 
+        $count = $category->transactions()->count();
+        if ($count > 0) {
+            return redirect()->route('categories.index')
+                ->with('error', "Ova kategorija ima {$count} transakcija, prvo ih premestite ili obrisite.");
+        }
+
         $category->delete();
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')
+            ->with('success', 'Kategorija je obrisana.');
     }
 }
