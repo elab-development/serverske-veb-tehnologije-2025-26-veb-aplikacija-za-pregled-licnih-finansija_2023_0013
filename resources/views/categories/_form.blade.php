@@ -33,11 +33,25 @@
         @error('color') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
     </div>
 
-    <div>
+    @php
+        $icons = [
+            'bi-tag', 'bi-cart', 'bi-house', 'bi-receipt', 'bi-car-front', 'bi-controller',
+            'bi-cash-stack', 'bi-briefcase', 'bi-three-dots', 'bi-bag', 'bi-bank',
+            'bi-piggy-bank', 'bi-wallet', 'bi-credit-card', 'bi-cup-hot', 'bi-airplane',
+        ];
+    @endphp
+    <div x-data="{ icon: '{{ old('icon', $category->icon ?? 'bi-tag') }}' }">
         <label class="block text-sm font-medium mb-1">Ikonica</label>
-        <input type="text" name="icon" value="{{ old('icon', $category->icon) }}"
-               placeholder="bi-tag"
-               class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
+        <input type="hidden" name="icon" x-model="icon">
+        <div class="grid grid-cols-8 gap-2">
+            @foreach ($icons as $i)
+                <button type="button" @click="icon = '{{ $i }}'"
+                        :class="icon === '{{ $i }}' ? 'border-app-accent bg-app-bg-soft' : 'border-app-border'"
+                        class="w-10 h-10 border rounded-lg flex items-center justify-center hover:bg-app-bg-soft text-app-text">
+                    <i class="bi {{ $i }}"></i>
+                </button>
+            @endforeach
+        </div>
         @error('icon') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
     </div>
 
