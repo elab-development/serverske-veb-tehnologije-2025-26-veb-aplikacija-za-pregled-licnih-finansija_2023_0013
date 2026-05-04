@@ -9,7 +9,14 @@
 
     @include('transactions._modal', ['categories' => $categories])
 
-    <form method="GET" action="{{ route('transactions.index') }}" class="bg-white border border-app-border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+    <form method="GET" action="{{ route('transactions.index') }}"
+          x-data
+          @submit="
+              [...$el.querySelectorAll('input, select')].forEach(el => {
+                  if (el.name !== '_token' && el.value === '') el.disabled = true;
+              });
+          "
+          class="bg-white border border-app-border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-5 gap-3">
         <div>
             <label class="block text-xs text-app-text-muted mb-1">Od</label>
             <input type="date" name="from" value="{{ $filters['from'] }}" class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
