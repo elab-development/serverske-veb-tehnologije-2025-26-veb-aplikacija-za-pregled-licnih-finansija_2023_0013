@@ -50,4 +50,12 @@ class Transaction extends Model
         }
         return $query;
     }
+
+    public function scopeOfCategory($query, ?int $categoryId)
+    {
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+        return $query;
+    }
 }
