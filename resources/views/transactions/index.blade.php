@@ -68,6 +68,11 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="px-5 py-3 border-t border-app-border flex items-center justify-between text-sm text-app-text-muted">
+                <span>Ukupno: {{ $transactions->total() }}</span>
+                <div>{{ $transactions->onEachSide(1)->links() }}</div>
+            </div>
         @endif
     </div>
 </x-app-layout>
