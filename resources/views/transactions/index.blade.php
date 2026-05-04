@@ -68,7 +68,15 @@
             <table class="w-full text-sm">
                 <thead class="bg-app-bg-soft text-app-text-muted text-xs uppercase">
                     <tr>
-                        <th class="text-left px-5 py-3 font-medium">Datum</th>
+                        <th class="text-left px-5 py-3 font-medium">
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'date', 'direction' => $sort === 'date' && $direction === 'desc' ? 'asc' : 'desc']) }}"
+                               class="inline-flex items-center gap-1 sort-date">
+                                Datum
+                                @if ($sort === 'date')
+                                    <i class="bi bi-arrow-{{ $direction === 'desc' ? 'down' : 'up' }}"></i>
+                                @endif
+                            </a>
+                        </th>
                         <th class="text-left px-5 py-3 font-medium">Kategorija</th>
                         <th class="text-right px-5 py-3 font-medium">Iznos</th>
                         <th class="text-left px-5 py-3 font-medium">Napomena</th>

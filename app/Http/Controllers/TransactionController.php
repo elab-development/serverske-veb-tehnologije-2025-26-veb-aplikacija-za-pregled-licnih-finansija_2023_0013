@@ -21,20 +21,27 @@ class TransactionController extends Controller
             'q' => $request->query('q'),
         ];
 
+        $sort = in_array($request->query('sort'), ['date', 'amount'], true)
+            ? $request->query('sort')
+            : 'date';
+        $direction = $request->query('direction') === 'asc' ? 'asc' : 'desc';
+
+        $sortColumn = $sort === 'amount' ? 'amount' : 'transaction_date';
+
         $transactions = $request->user()->transactions()
             ->with('category')
             ->betweenDates($filters['from'], $filters['to'])
             ->ofCategory($filters['category_id'] ? (int) $filters['category_id'] : null)
             ->ofType($filters['type'])
             ->searchNote($filters['q'])
-            ->orderByDesc('transaction_date')
+            ->orderBy($sortColumn, $direction)
             ->orderByDesc('id')
             ->paginate(20)
             ->withQueryString();
 
         $categories = $request->user()->categories()->orderBy('name')->get();
 
-        return view('transactions.index', compact('transactions', 'categories', 'filters'));
+        return view('transactions.index', compact('transactions', 'categories', 'filters', 'sort', 'direction'));
     }
 
     public function store(TransactionRequest $request): RedirectResponse
