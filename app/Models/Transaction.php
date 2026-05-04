@@ -66,4 +66,12 @@ class Transaction extends Model
         }
         return $query;
     }
+
+    public function scopeSearchNote($query, ?string $term)
+    {
+        if (filled($term)) {
+            $query->where('note', 'like', '%' . trim($term) . '%');
+        }
+        return $query;
+    }
 }
