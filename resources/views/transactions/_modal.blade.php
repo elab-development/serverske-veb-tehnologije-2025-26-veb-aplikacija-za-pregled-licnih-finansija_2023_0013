@@ -1,8 +1,33 @@
 @props(['categories'])
 
-<div x-data="{ open: false }"
+@php
+    $catsByType = $categories->groupBy('type');
+@endphp
+
+<div x-data="{
+        open: false,
+        type: 'expense',
+        action: '{{ route('transactions.store') }}',
+        method: 'POST',
+        title: 'Nova transakcija',
+        amount: '',
+        date: '{{ date('Y-m-d') }}',
+        category_id: '',
+        note: '',
+        cats: @js($catsByType),
+     }"
      x-show="open"
-     x-on:open-tx-modal.window="open = true"
+     x-on:open-tx-modal.window="
+        open = true;
+        type = $event.detail?.type || 'expense';
+        action = $event.detail?.action || '{{ route('transactions.store') }}';
+        method = $event.detail?.method || 'POST';
+        title = $event.detail?.title || 'Nova transakcija';
+        amount = $event.detail?.amount || '';
+        date = $event.detail?.date || '{{ date('Y-m-d') }}';
+        category_id = $event.detail?.category_id || '';
+        note = $event.detail?.note || '';
+     "
      @keydown.escape.window="open = false"
      x-cloak
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
@@ -10,24 +35,27 @@
          class="bg-white rounded-xl shadow-lg w-full max-w-md p-6"
          id="newTransactionModal">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold">Nova transakcija</h2>
+            <h2 class="text-lg font-semibold" x-text="title"></h2>
             <button @click="open = false" type="button" class="close-btn text-app-text-muted hover:text-app-text">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
 
-        <form method="POST" action="{{ route('transactions.store') }}" class="space-y-4">
+        <form :action="action" method="POST" class="space-y-4">
             @csrf
+            <input type="hidden" name="_method" :value="method">
 
             <div>
                 <label class="block text-sm font-medium mb-2">Tip</label>
                 <div class="grid grid-cols-2 gap-2">
-                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2 has-[:checked]:border-app-accent has-[:checked]:bg-blue-50">
-                        <input type="radio" name="type" value="expense" checked class="text-app-negative">
+                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2"
+                           :class="type === 'expense' ? 'border-app-accent bg-blue-50' : ''">
+                        <input type="radio" name="type" value="expense" x-model="type" @change="category_id = ''" class="text-app-negative">
                         <span class="text-sm font-medium">Rashod</span>
                     </label>
-                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2 has-[:checked]:border-app-accent has-[:checked]:bg-blue-50">
-                        <input type="radio" name="type" value="income" class="text-app-positive">
+                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2"
+                           :class="type === 'income' ? 'border-app-accent bg-blue-50' : ''">
+                        <input type="radio" name="type" value="income" x-model="type" @change="category_id = ''" class="text-app-positive">
                         <span class="text-sm font-medium">Prihod</span>
                     </label>
                 </div>
@@ -35,33 +63,33 @@
 
             <div>
                 <label class="block text-sm font-medium mb-1">Iznos (RSD)</label>
-                <input type="number" step="0.01" name="amount" value="{{ old('amount') }}" required
+                <input type="number" step="0.01" name="amount" x-model="amount" required
                        class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
                 @error('amount') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Datum</label>
-                <input type="date" name="transaction_date" value="{{ old('transaction_date', date('Y-m-d')) }}" required
+                <input type="date" name="transaction_date" x-model="date" :max="new Date().toISOString().slice(0,10)" required
                        class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
                 @error('transaction_date') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Kategorija</label>
-                <select name="category_id" required
+                <select name="category_id" x-model="category_id" required
                         class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
                     <option value="">-- izaberi --</option>
-                    @foreach ($categories as $c)
-                        <option value="{{ $c->id }}">{{ $c->name }}</option>
-                    @endforeach
+                    <template x-for="c in (cats[type] || [])" :key="c.id">
+                        <option :value="c.id" x-text="c.name"></option>
+                    </template>
                 </select>
                 @error('category_id') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Napomena</label>
-                <textarea name="note" rows="2" class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">{{ old('note') }}</textarea>
+                <textarea name="note" rows="2" x-model="note" class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent"></textarea>
             </div>
 
             <div class="flex items-center justify-end gap-2 pt-2">
