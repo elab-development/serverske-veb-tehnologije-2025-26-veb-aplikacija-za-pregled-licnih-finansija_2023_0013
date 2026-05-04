@@ -56,7 +56,7 @@
                                         ">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <form method="POST" action="{{ route('transactions.destroy', $tx) }}" class="inline ml-2 tx-delete-form" onsubmit="return confirm('Obrisati transakciju?')">
+                                <form method="POST" action="{{ route('transactions.destroy', $tx) }}" class="inline ml-2 tx-delete-form" onsubmit="return confirm('Obrisati transakciju od {{ number_format($tx->amount, 2, ',', '.') }} RSD?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="delete-tx-btn text-app-text-muted hover:text-app-negative">
