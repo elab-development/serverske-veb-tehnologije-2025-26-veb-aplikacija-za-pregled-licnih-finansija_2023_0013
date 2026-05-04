@@ -44,7 +44,7 @@
         </div>
         <div>
             <label class="block text-xs text-app-text-muted mb-1">Pretraga napomene</label>
-            <input type="text" name="q" value="{{ $filters['q'] }}" placeholder="kljucna rec..." class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+            <input type="text" name="q" value="{{ $filters['q'] }}" placeholder="pretrazi napomenu..." class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
         </div>
         <div class="md:col-span-5 flex items-center justify-end gap-2 pt-2 border-t border-app-border">
             @if (array_filter($filters))
