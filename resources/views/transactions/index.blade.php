@@ -1,7 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <h1 class="text-2xl font-semibold">Transakcije</h1>
+        <button type="button" @click="$dispatch('open-tx-modal')"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-app-accent hover:bg-app-accent-hov text-white rounded-lg text-sm font-medium new-transaction-btn">
+            <i class="bi bi-plus-lg"></i> Nova transakcija
+        </button>
     </x-slot>
+
+    @include('transactions._modal', ['categories' => $categories])
 
     <div class="bg-white border border-app-border rounded-xl overflow-hidden">
         @if ($transactions->isEmpty())
