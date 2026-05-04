@@ -58,4 +58,12 @@ class Transaction extends Model
         }
         return $query;
     }
+
+    public function scopeOfType($query, ?string $type)
+    {
+        if (in_array($type, [self::TYPE_INCOME, self::TYPE_EXPENSE], true)) {
+            $query->where('type', $type);
+        }
+        return $query;
+    }
 }
