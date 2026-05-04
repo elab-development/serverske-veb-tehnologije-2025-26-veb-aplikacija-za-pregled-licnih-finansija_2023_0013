@@ -43,8 +43,26 @@
                             </td>
                             <td class="px-5 py-3 text-app-text-muted">{{ $tx->note }}</td>
                             <td class="px-5 py-3 text-right whitespace-nowrap">
-                                <i class="bi bi-pencil text-app-text-muted"></i>
-                                <i class="bi bi-trash text-app-text-muted ml-2"></i>
+                                <button type="button" class="edit-tx-btn text-app-text-muted hover:text-app-text"
+                                        @click="
+                                            const r = await fetch('{{ route('transactions.show', $tx) }}', { headers: { Accept: 'application/json' } });
+                                            const tx = await r.json();
+                                            $dispatch('open-tx-modal', {
+                                                title: 'Izmena transakcije',
+                                                action: '{{ route('transactions.update', $tx) }}',
+                                                method: 'PUT',
+                                                ...tx,
+                                            });
+                                        ">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form method="POST" action="{{ route('transactions.destroy', $tx) }}" class="inline ml-2 tx-delete-form" onsubmit="return confirm('Obrisati transakciju?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-tx-btn text-app-text-muted hover:text-app-negative">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
