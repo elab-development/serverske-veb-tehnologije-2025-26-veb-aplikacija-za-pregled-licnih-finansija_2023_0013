@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,46 +24,34 @@ class TransactionController extends Controller
         return view('transactions.index', compact('transactions', 'categories'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(TransactionRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'type' => 'required|in:income,expense',
-            'category_id' => 'required|integer|exists:categories,id',
-            'amount' => 'required|numeric|min:0.01',
-            'transaction_date' => 'required|date|before_or_equal:today',
-            'note' => 'nullable|string|max:1000',
-        ]);
-
+        $data = $request->validated();
         $category = $request->user()->categories()->where('id', $data['category_id'])->firstOrFail();
+
         if ($category->type !== $data['type']) {
             return back()->withErrors(['category_id' => 'Kategorija ne odgovara tipu transakcije.'])->withInput();
         }
 
         $request->user()->transactions()->create($data);
 
-        return redirect()->route('transactions.index');
+        return redirect()->route('transactions.index')->with('success', 'Transakcija je dodata.');
     }
 
-    public function update(Request $request, Transaction $transaction): RedirectResponse
+    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
     {
         Gate::authorize('update', $transaction);
 
-        $data = $request->validate([
-            'type' => 'required|in:income,expense',
-            'category_id' => 'required|integer|exists:categories,id',
-            'amount' => 'required|numeric|min:0.01',
-            'transaction_date' => 'required|date|before_or_equal:today',
-            'note' => 'nullable|string|max:1000',
-        ]);
-
+        $data = $request->validated();
         $category = $request->user()->categories()->where('id', $data['category_id'])->firstOrFail();
+
         if ($category->type !== $data['type']) {
             return back()->withErrors(['category_id' => 'Kategorija ne odgovara tipu transakcije.'])->withInput();
         }
 
         $transaction->update($data);
 
-        return redirect()->route('transactions.index');
+        return redirect()->route('transactions.index')->with('success', 'Transakcija je izmenjena.');
     }
 
     public function destroy(Transaction $transaction): RedirectResponse
@@ -71,6 +60,6 @@ class TransactionController extends Controller
 
         $transaction->delete();
 
-        return redirect()->route('transactions.index');
+        return redirect()->route('transactions.index')->with('success', 'Transakcija je obrisana.');
     }
 }
