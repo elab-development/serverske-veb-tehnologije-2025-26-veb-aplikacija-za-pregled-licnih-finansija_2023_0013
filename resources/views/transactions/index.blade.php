@@ -69,7 +69,7 @@
                 @endif
             </div>
         @else
-            <table class="w-full text-sm">
+            <table class="w-full text-sm hidden md:table">
                 <thead class="bg-app-bg-soft text-app-text-muted text-xs uppercase">
                     <tr>
                         <th class="text-left px-5 py-3 font-medium">
@@ -137,6 +137,28 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="md:hidden divide-y divide-app-border">
+                @foreach ($transactions as $tx)
+                    <div class="p-4 transaction-row-mobile">
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm" style="background-color: {{ $tx->category->color }}">
+                                    <i class="bi {{ $tx->category->icon ?? 'bi-tag' }}"></i>
+                                </span>
+                                <span class="font-medium">{{ $tx->category->name }}</span>
+                            </div>
+                            <span class="font-semibold tabular-nums {{ $tx->type === 'income' ? 'text-app-positive' : 'text-app-negative' }}">
+                                {{ $tx->type === 'income' ? '+' : '-' }}{{ number_format($tx->amount, 2, ',', '.') }}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-app-text-muted">
+                            <span>{{ $tx->transaction_date->format('d.m.Y') }}</span>
+                            @if ($tx->note)<span class="truncate ml-2">{{ $tx->note }}</span>@endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
 
             <div class="px-5 py-3 border-t border-app-border flex items-center justify-between text-sm text-app-text-muted">
                 <span>Ukupno: {{ $transactions->total() }}</span>
