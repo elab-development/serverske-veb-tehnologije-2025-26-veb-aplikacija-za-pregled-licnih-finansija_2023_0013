@@ -95,12 +95,12 @@
                     @foreach ($transactions as $tx)
                         <tr class="transaction-row hover:bg-app-bg-soft">
                             <td class="px-5 py-3 whitespace-nowrap">{{ $tx->transaction_date->format('d.m.Y') }}</td>
-                            <td class="px-5 py-3">
+                            <td class="px-5 py-3 category-cell">
                                 <div class="inline-flex items-center gap-2">
-                                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-sm" style="background-color: {{ $tx->category->color }}">
+                                    <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white shadow-sm category-icon" style="background-color: {{ $tx->category->color }}" title="{{ $tx->category->name }}">
                                         <i class="bi {{ $tx->category->icon ?? 'bi-tag' }}"></i>
                                     </span>
-                                    <span>{{ $tx->category->name }}</span>
+                                    <span class="font-medium">{{ $tx->category->name }}</span>
                                 </div>
                             </td>
                             <td class="px-5 py-3 text-right font-semibold tabular-nums {{ $tx->type === 'income' ? 'text-app-positive amount-income' : 'text-app-negative amount-expense' }}">
