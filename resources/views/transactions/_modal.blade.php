@@ -20,6 +20,20 @@
             @csrf
 
             <div>
+                <label class="block text-sm font-medium mb-2">Tip</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2 has-[:checked]:border-app-accent has-[:checked]:bg-blue-50">
+                        <input type="radio" name="type" value="expense" checked class="text-app-negative">
+                        <span class="text-sm font-medium">Rashod</span>
+                    </label>
+                    <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2 has-[:checked]:border-app-accent has-[:checked]:bg-blue-50">
+                        <input type="radio" name="type" value="income" class="text-app-positive">
+                        <span class="text-sm font-medium">Prihod</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium mb-1">Iznos (RSD)</label>
                 <input type="number" step="0.01" name="amount" value="{{ old('amount') }}" required
                        class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
@@ -44,8 +58,6 @@
                 </select>
                 @error('category_id') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
             </div>
-
-            <input type="hidden" name="type" value="expense">
 
             <div>
                 <label class="block text-sm font-medium mb-1">Napomena</label>
