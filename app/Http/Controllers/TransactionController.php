@@ -62,4 +62,18 @@ class TransactionController extends Controller
 
         return redirect()->route('transactions.index')->with('success', 'Transakcija je obrisana.');
     }
+
+    public function show(Transaction $transaction)
+    {
+        Gate::authorize('view', $transaction);
+
+        return response()->json([
+            'id' => $transaction->id,
+            'type' => $transaction->type,
+            'amount' => $transaction->amount,
+            'transaction_date' => $transaction->transaction_date->format('Y-m-d'),
+            'category_id' => $transaction->category_id,
+            'note' => $transaction->note,
+        ]);
+    }
 }
