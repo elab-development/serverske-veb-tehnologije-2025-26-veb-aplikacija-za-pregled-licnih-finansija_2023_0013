@@ -9,6 +9,43 @@
 
     @include('transactions._modal', ['categories' => $categories])
 
+    <form method="GET" action="{{ route('transactions.index') }}" class="bg-white border border-app-border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div>
+            <label class="block text-xs text-app-text-muted mb-1">Od</label>
+            <input type="date" name="from" value="{{ $filters['from'] }}" class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+        </div>
+        <div>
+            <label class="block text-xs text-app-text-muted mb-1">Do</label>
+            <input type="date" name="to" value="{{ $filters['to'] }}" class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+        </div>
+        <div>
+            <label class="block text-xs text-app-text-muted mb-1">Kategorija</label>
+            <select name="category_id" class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+                <option value="">Sve kategorije</option>
+                @foreach ($categories as $c)
+                    <option value="{{ $c->id }}" @selected((string) $filters['category_id'] === (string) $c->id)>{{ $c->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs text-app-text-muted mb-1">Tip</label>
+            <select name="type" class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+                <option value="">Svi</option>
+                <option value="income" @selected($filters['type'] === 'income')>Prihod</option>
+                <option value="expense" @selected($filters['type'] === 'expense')>Rashod</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs text-app-text-muted mb-1">Pretraga napomene</label>
+            <input type="text" name="q" value="{{ $filters['q'] }}" placeholder="kljucna rec..." class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
+        </div>
+        <div class="md:col-span-5 flex items-center justify-end gap-2 pt-2 border-t border-app-border">
+            <button type="submit" class="px-4 py-2 bg-app-accent hover:bg-app-accent-hov text-white rounded-lg text-sm font-medium">
+                <i class="bi bi-funnel"></i> Primeni
+            </button>
+        </div>
+    </form>
+
     <div class="bg-white border border-app-border rounded-xl overflow-hidden">
         @if ($transactions->isEmpty())
             <div class="p-12 text-center text-app-text-muted">
