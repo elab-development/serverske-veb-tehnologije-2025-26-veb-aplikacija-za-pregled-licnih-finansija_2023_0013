@@ -60,9 +60,13 @@
 
     <div class="bg-white border border-app-border rounded-xl overflow-hidden">
         @if ($transactions->isEmpty())
-            <div class="p-12 text-center text-app-text-muted">
+            <div class="p-12 text-center text-app-text-muted empty-state">
                 <i class="bi bi-inbox text-4xl block mb-3"></i>
-                Jos uvek nemate transakcija.
+                @if (array_filter($filters))
+                    Nijedna transakcija ne odgovara filterima. Probajte da resetujete.
+                @else
+                    Jos uvek nemate transakcija. Kliknite na "Nova transakcija" da dodate prvu.
+                @endif
             </div>
         @else
             <table class="w-full text-sm">
