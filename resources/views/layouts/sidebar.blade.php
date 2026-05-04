@@ -15,7 +15,7 @@
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
             <i class="bi bi-grid"></i><span>Dashboard</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
+        <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('transactions.*') ? 'bg-app-bg-soft font-medium' : '' }}">
             <i class="bi bi-arrow-left-right"></i><span>Transakcije</span>
         </a>
         <a href="{{ route('categories.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('categories.*') ? 'bg-app-bg-soft font-medium' : '' }}">
