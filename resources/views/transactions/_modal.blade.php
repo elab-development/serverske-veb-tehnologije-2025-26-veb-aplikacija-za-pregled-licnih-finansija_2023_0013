@@ -43,7 +43,9 @@
 
         <form :action="action" method="POST" class="space-y-4">
             @csrf
-            <input type="hidden" name="_method" :value="method">
+            <template x-if="method !== 'POST'">
+                <input type="hidden" name="_method" :value="method">
+            </template>
 
             <div>
                 <label class="block text-sm font-medium mb-2">Tip</label>
