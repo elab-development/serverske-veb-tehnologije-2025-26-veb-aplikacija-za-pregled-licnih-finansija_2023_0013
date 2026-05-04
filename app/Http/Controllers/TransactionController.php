@@ -17,7 +17,7 @@ class TransactionController extends Controller
             ->with('category')
             ->orderByDesc('transaction_date')
             ->orderByDesc('id')
-            ->get();
+            ->paginate(20);
 
         $categories = $request->user()->categories()->orderBy('name')->get();
 
