@@ -50,12 +50,12 @@
                 <div class="grid grid-cols-2 gap-2">
                     <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2"
                            :class="type === 'expense' ? 'border-app-accent bg-blue-50' : ''">
-                        <input type="radio" name="type" value="expense" x-model="type" @change="category_id = ''" class="text-app-negative">
+                        <input type="radio" name="type" value="expense" x-model="type" @change="category_id = (cats['expense'] || [])[0]?.id || ''" class="text-app-negative">
                         <span class="text-sm font-medium">Rashod</span>
                     </label>
                     <label class="border border-app-border rounded-lg px-3 py-2 cursor-pointer flex items-center gap-2"
                            :class="type === 'income' ? 'border-app-accent bg-blue-50' : ''">
-                        <input type="radio" name="type" value="income" x-model="type" @change="category_id = ''" class="text-app-positive">
+                        <input type="radio" name="type" value="income" x-model="type" @change="category_id = (cats['income'] || [])[0]?.id || ''" class="text-app-positive">
                         <span class="text-sm font-medium">Prihod</span>
                     </label>
                 </div>
