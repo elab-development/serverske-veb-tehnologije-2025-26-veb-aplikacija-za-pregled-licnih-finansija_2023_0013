@@ -18,7 +18,12 @@ class ScreenshotTourTest extends DuskTestCase
             'email' => 'marko@test.com',
         ]);
 
-        $dan = (int) (env('SCREENSHOT_DAN') ?? 3);
+        $expense = $user->categories()->where('name', 'Hrana')->first();
+        $income = $user->categories()->where('name', 'Plata')->first();
+        \App\Models\Transaction::factory()->count(3)->for($user)->for($expense)->expense()->create();
+        \App\Models\Transaction::factory()->count(2)->for($user)->for($income)->income()->create();
+
+        $dan = (int) (env('SCREENSHOT_DAN') ?? 4);
 
         $viewports = [
             'mobile' => [375, 667],
@@ -32,7 +37,7 @@ class ScreenshotTourTest extends DuskTestCase
             'register' => '/register',
             'dashboard' => '/dashboard',
             'kategorije' => '/categories',
-            'kategorija-create' => '/categories/create',
+            'transakcije' => '/transactions',
             'podesavanja' => '/profile',
         ];
 
@@ -41,7 +46,7 @@ class ScreenshotTourTest extends DuskTestCase
                 $browser->resize($w, $h);
 
                 foreach ($pages as $name => $url) {
-                    if (in_array($url, ['/dashboard', '/categories', '/categories/create', '/profile'], true)) {
+                    if (in_array($url, ['/dashboard', '/categories', '/transactions', '/profile'], true)) {
                         $browser->loginAs($user);
                     } else {
                         $browser->logout();
