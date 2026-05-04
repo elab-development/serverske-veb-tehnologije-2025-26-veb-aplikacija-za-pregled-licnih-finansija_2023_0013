@@ -38,8 +38,8 @@
                                     <span>{{ $tx->category->name }}</span>
                                 </div>
                             </td>
-                            <td class="px-5 py-3 text-right font-semibold tabular-nums">
-                                {{ number_format($tx->amount, 2, ',', '.') }} RSD
+                            <td class="px-5 py-3 text-right font-semibold tabular-nums {{ $tx->type === 'income' ? 'text-app-positive amount-income' : 'text-app-negative amount-expense' }}">
+                                {{ $tx->type === 'income' ? '+' : '-' }}{{ number_format($tx->amount, 2, ',', '.') }} RSD
                             </td>
                             <td class="px-5 py-3 text-app-text-muted">{{ $tx->note }}</td>
                             <td class="px-5 py-3 text-right whitespace-nowrap">
