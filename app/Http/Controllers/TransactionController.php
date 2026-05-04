@@ -86,6 +86,7 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         Gate::authorize('view', $transaction);
+        $transaction->loadMissing('category');
 
         return response()->json([
             'id' => $transaction->id,
@@ -93,6 +94,7 @@ class TransactionController extends Controller
             'amount' => $transaction->amount,
             'transaction_date' => $transaction->transaction_date->format('Y-m-d'),
             'category_id' => $transaction->category_id,
+            'category_name' => $transaction->category->name,
             'note' => $transaction->note,
         ]);
     }
