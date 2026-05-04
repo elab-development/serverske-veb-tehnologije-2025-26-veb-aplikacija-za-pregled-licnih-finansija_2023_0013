@@ -39,4 +39,15 @@ class Transaction extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeBetweenDates($query, ?string $from, ?string $to)
+    {
+        if ($from) {
+            $query->where('transaction_date', '>=', $from);
+        }
+        if ($to) {
+            $query->where('transaction_date', '<=', $to);
+        }
+        return $query;
+    }
 }
