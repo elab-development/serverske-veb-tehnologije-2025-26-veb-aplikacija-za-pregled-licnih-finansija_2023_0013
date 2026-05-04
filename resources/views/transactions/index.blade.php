@@ -47,6 +47,11 @@
             <input type="text" name="q" value="{{ $filters['q'] }}" placeholder="kljucna rec..." class="w-full px-3 py-2 border border-app-border rounded-lg text-sm">
         </div>
         <div class="md:col-span-5 flex items-center justify-end gap-2 pt-2 border-t border-app-border">
+            @if (array_filter($filters))
+                <a href="{{ route('transactions.index') }}" class="px-4 py-2 border border-app-border rounded-lg text-sm hover:bg-app-bg-soft reset-filters">
+                    <i class="bi bi-x-circle"></i> Resetuj
+                </a>
+            @endif
             <button type="submit" class="px-4 py-2 bg-app-accent hover:bg-app-accent-hov text-white rounded-lg text-sm font-medium">
                 <i class="bi bi-funnel"></i> Primeni
             </button>
