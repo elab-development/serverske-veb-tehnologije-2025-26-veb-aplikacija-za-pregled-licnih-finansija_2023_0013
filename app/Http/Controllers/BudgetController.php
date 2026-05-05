@@ -34,6 +34,19 @@ class BudgetController extends Controller
     public function store(BudgetRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+        $exists = $request->user()->budgets()
+            ->where('category_id', $data['category_id'])
+            ->where('month', $data['month'])
+            ->where('year', $data['year'])
+            ->exists();
+
+        if ($exists) {
+            return back()
+                ->withErrors(['category_id' => 'Vec postoji budzet za ovu kategoriju u izabranom periodu.'])
+                ->withInput();
+        }
+
         $request->user()->budgets()->create($data);
 
         return redirect()->route('budgets.index', ['month' => $data['month'], 'year' => $data['year']])
