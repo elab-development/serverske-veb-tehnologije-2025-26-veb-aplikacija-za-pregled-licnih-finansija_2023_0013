@@ -31,15 +31,6 @@
             </div>
         @else
             <table class="w-full text-sm">
-                <thead class="bg-app-bg-soft text-app-text-muted text-xs uppercase">
-                    <tr>
-                        <th class="text-left px-5 py-3 font-medium">Kategorija</th>
-                        <th class="text-right px-5 py-3 font-medium">Limit</th>
-                        <th class="text-right px-5 py-3 font-medium">Potroseno</th>
-                        <th class="text-right px-5 py-3 font-medium">Ostalo</th>
-                        <th class="text-right px-5 py-3 font-medium">%</th>
-                    </tr>
-                </thead>
                 <tbody class="divide-y divide-app-border">
                     @foreach ($budgets as $budget)
                         @php
@@ -48,18 +39,22 @@
                             $remaining = max(0, (float) $budget->limit_amount - $spent);
                         @endphp
                         <tr class="budget-row">
-                            <td class="px-5 py-3">
-                                <div class="inline-flex items-center gap-2">
+                            <td class="px-5 py-3" colspan="5">
+                                <div class="flex items-center gap-3 mb-2">
                                     <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-sm" style="background-color: {{ $budget->category->color }}">
                                         <i class="bi {{ $budget->category->icon ?? 'bi-tag' }}"></i>
                                     </span>
-                                    <span class="font-medium budget-category">{{ $budget->category->name }}</span>
+                                    <span class="font-medium budget-category flex-1">{{ $budget->category->name }}</span>
+                                    <span class="text-sm tabular-nums text-app-text-muted">
+                                        {{ number_format($spent, 0, ',', '.') }} / {{ number_format($budget->limit_amount, 0, ',', '.') }} RSD
+                                    </span>
+                                    <span class="text-sm font-semibold tabular-nums">{{ $pct }}%</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-app-bg-soft overflow-hidden">
+                                    <div class="progress-bar h-full rounded-full bg-app-positive"
+                                         style="width: {{ min(100, $pct) }}%"></div>
                                 </div>
                             </td>
-                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($budget->limit_amount, 0, ',', '.') }}</td>
-                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($spent, 0, ',', '.') }}</td>
-                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($remaining, 0, ',', '.') }}</td>
-                            <td class="px-5 py-3 text-right font-semibold tabular-nums">{{ $pct }}%</td>
                         </tr>
                     @endforeach
                 </tbody>
