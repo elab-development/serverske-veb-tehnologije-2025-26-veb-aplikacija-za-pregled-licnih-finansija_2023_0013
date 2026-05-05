@@ -21,7 +21,7 @@
         <a href="{{ route('categories.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('categories.*') ? 'bg-app-bg-soft font-medium' : '' }}">
             <i class="bi bi-tags"></i><span>Kategorije</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
+        <a href="{{ route('budgets.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('budgets.*') ? 'bg-app-bg-soft font-medium' : '' }}">
             <i class="bi bi-piggy-bank"></i><span>Budzeti</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
