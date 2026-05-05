@@ -55,6 +55,20 @@
                                         {{ number_format($spent, 0, ',', '.') }} / {{ number_format($budget->limit_amount, 0, ',', '.') }} RSD
                                     </span>
                                     <span class="text-sm font-semibold tabular-nums">{{ $pct }}%</span>
+                                    <button type="button" class="edit-budget-btn text-app-text-muted hover:text-app-text"
+                                            @click="
+                                                const r = await fetch('{{ route('budgets.show', $budget) }}', { headers: { Accept: 'application/json' } });
+                                                const b = await r.json();
+                                                $dispatch('open-budget-modal', {
+                                                    title: 'Izmena budzeta',
+                                                    action: '{{ route('budgets.update', $budget) }}',
+                                                    method: 'PUT',
+                                                    showCategory: false,
+                                                    ...b,
+                                                });
+                                            ">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
                                 </div>
                                 @php
                                     $barColor = $pct >= 100 ? 'bg-app-negative' : ($pct >= 80 ? 'bg-app-warning' : 'bg-app-positive');

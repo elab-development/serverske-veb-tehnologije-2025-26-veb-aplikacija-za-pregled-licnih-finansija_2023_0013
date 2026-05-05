@@ -73,6 +73,20 @@ class BudgetController extends Controller
         [$month, $year] = [$budget->month, $budget->year];
         $budget->delete();
 
-        return redirect()->route('budgets.index', ['month' => $month, 'year' => $year]);
+        return redirect()->route('budgets.index', ['month' => $month, 'year' => $year])
+            ->with('success', 'Budzet je obrisan.');
+    }
+
+    public function show(Budget $budget)
+    {
+        Gate::authorize('view', $budget);
+
+        return response()->json([
+            'id' => $budget->id,
+            'category_id' => $budget->category_id,
+            'limit_amount' => $budget->limit_amount,
+            'month' => $budget->month,
+            'year' => $budget->year,
+        ]);
     }
 }

@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('transactions', TransactionController::class)->except(['create', 'edit']);
-    Route::resource('budgets', BudgetController::class)->except(['show', 'create', 'edit']);
+    Route::resource('budgets', BudgetController::class)->except(['create', 'edit']);
     Route::post('/budgets/copy-previous', [BudgetController::class, 'copyPrevious'])->name('budgets.copy-previous');
 });
 
