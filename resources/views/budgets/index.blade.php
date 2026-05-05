@@ -23,7 +23,47 @@
         </select>
     </form>
 
-    <div class="bg-white border border-app-border rounded-xl p-6 text-center text-app-text-muted">
-        Lista budzeta dolazi u narednom commit-u.
+    <div class="bg-white border border-app-border rounded-xl overflow-hidden">
+        @if ($budgets->isEmpty())
+            <div class="p-12 text-center text-app-text-muted budgets-empty">
+                <i class="bi bi-piggy-bank text-4xl block mb-3"></i>
+                Za izabrani period nema budzeta.
+            </div>
+        @else
+            <table class="w-full text-sm">
+                <thead class="bg-app-bg-soft text-app-text-muted text-xs uppercase">
+                    <tr>
+                        <th class="text-left px-5 py-3 font-medium">Kategorija</th>
+                        <th class="text-right px-5 py-3 font-medium">Limit</th>
+                        <th class="text-right px-5 py-3 font-medium">Potroseno</th>
+                        <th class="text-right px-5 py-3 font-medium">Ostalo</th>
+                        <th class="text-right px-5 py-3 font-medium">%</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-app-border">
+                    @foreach ($budgets as $budget)
+                        @php
+                            $spent = $budget->spentAmount();
+                            $pct = $budget->percentSpent();
+                            $remaining = max(0, (float) $budget->limit_amount - $spent);
+                        @endphp
+                        <tr class="budget-row">
+                            <td class="px-5 py-3">
+                                <div class="inline-flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-sm" style="background-color: {{ $budget->category->color }}">
+                                        <i class="bi {{ $budget->category->icon ?? 'bi-tag' }}"></i>
+                                    </span>
+                                    <span class="font-medium budget-category">{{ $budget->category->name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($budget->limit_amount, 0, ',', '.') }}</td>
+                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($spent, 0, ',', '.') }}</td>
+                            <td class="px-5 py-3 text-right tabular-nums">{{ number_format($remaining, 0, ',', '.') }}</td>
+                            <td class="px-5 py-3 text-right font-semibold tabular-nums">{{ $pct }}%</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
     </div>
 </x-app-layout>
