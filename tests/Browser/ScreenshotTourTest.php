@@ -20,10 +20,28 @@ class ScreenshotTourTest extends DuskTestCase
 
         $expense = $user->categories()->where('name', 'Hrana')->first();
         $income = $user->categories()->where('name', 'Plata')->first();
-        \App\Models\Transaction::factory()->count(3)->for($user)->for($expense)->expense()->create();
+        $kirija = $user->categories()->where('name', 'Kirija')->first();
+        \App\Models\Transaction::factory()->count(3)->for($user)->for($expense)->expense()->create([
+            'amount' => 3000,
+            'transaction_date' => now()->format('Y-m-d'),
+        ]);
         \App\Models\Transaction::factory()->count(2)->for($user)->for($income)->income()->create();
+        \App\Models\Budget::create([
+            'user_id' => $user->id,
+            'category_id' => $expense->id,
+            'limit_amount' => 12000,
+            'month' => now()->month,
+            'year' => now()->year,
+        ]);
+        \App\Models\Budget::create([
+            'user_id' => $user->id,
+            'category_id' => $kirija->id,
+            'limit_amount' => 30000,
+            'month' => now()->month,
+            'year' => now()->year,
+        ]);
 
-        $dan = (int) (env('SCREENSHOT_DAN') ?? 5);
+        $dan = (int) (env('SCREENSHOT_DAN') ?? 6);
 
         $viewports = [
             'mobile' => [375, 667],
@@ -39,6 +57,7 @@ class ScreenshotTourTest extends DuskTestCase
             'kategorije' => '/categories',
             'transakcije' => '/transactions',
             'transakcije-filter' => '/transactions?type=income',
+            'budzeti' => '/budgets',
             'podesavanja' => '/profile',
         ];
 
@@ -47,7 +66,7 @@ class ScreenshotTourTest extends DuskTestCase
                 $browser->resize($w, $h);
 
                 foreach ($pages as $name => $url) {
-                    if (str_starts_with($url, '/dashboard') || str_starts_with($url, '/categories') || str_starts_with($url, '/transactions') || str_starts_with($url, '/profile')) {
+                    if (str_starts_with($url, '/dashboard') || str_starts_with($url, '/categories') || str_starts_with($url, '/transactions') || str_starts_with($url, '/budgets') || str_starts_with($url, '/profile')) {
                         $browser->loginAs($user);
                     } else {
                         $browser->logout();
