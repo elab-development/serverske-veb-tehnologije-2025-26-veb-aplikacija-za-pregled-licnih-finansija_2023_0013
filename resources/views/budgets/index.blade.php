@@ -43,7 +43,8 @@
         @if ($budgets->isEmpty())
             <div class="p-12 text-center text-app-text-muted budgets-empty">
                 <i class="bi bi-piggy-bank text-4xl block mb-3"></i>
-                Za izabrani period nema budzeta.
+                <p class="mb-1">Za {{ $months[$month] }} {{ $year }} nema budzeta.</p>
+                <p class="text-sm">Kliknite na "Novi budzet" ili "Kopiraj iz prethodnog" da pocnete.</p>
             </div>
         @else
             <table class="w-full text-sm">
