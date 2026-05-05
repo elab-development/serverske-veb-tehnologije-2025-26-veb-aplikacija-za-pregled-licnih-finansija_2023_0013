@@ -69,6 +69,13 @@
                                             ">
                                         <i class="bi bi-pencil"></i>
                                     </button>
+                                    <form method="POST" action="{{ route('budgets.destroy', $budget) }}" class="inline budget-delete-form" onsubmit="return confirm('Obrisati budzet za {{ $budget->category->name }}?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="delete-budget-btn text-app-text-muted hover:text-app-negative">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                                 @php
                                     $barColor = $pct >= 100 ? 'bg-app-negative' : ($pct >= 80 ? 'bg-app-warning' : 'bg-app-positive');
