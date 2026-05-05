@@ -43,14 +43,18 @@
             </template>
 
             <div x-show="showCategory">
-                <label class="block text-sm font-medium mb-1">Kategorija (rashod)</label>
-                <select name="category_id" x-model="category_id" :required="showCategory"
-                        class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent">
-                    <option value="">-- izaberi --</option>
-                    @foreach ($expenseCategories as $c)
-                        <option value="{{ $c->id }}">{{ $c->name }}</option>
-                    @endforeach
-                </select>
+                <label class="block text-sm font-medium mb-1">Rashodna kategorija</label>
+                @if ($expenseCategories->isEmpty())
+                    <p class="text-sm text-app-negative">Niste kreirali nijednu rashodnu kategoriju.</p>
+                @else
+                    <select name="category_id" x-model="category_id" :required="showCategory"
+                            class="w-full px-3 py-2 border border-app-border rounded-lg focus:outline-none focus:border-app-accent budget-category-select">
+                        <option value="">-- izaberi --</option>
+                        @foreach ($expenseCategories as $c)
+                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                        @endforeach
+                    </select>
+                @endif
                 @error('category_id') <p class="mt-1 text-xs text-app-negative">{{ $message }}</p> @enderror
             </div>
 
