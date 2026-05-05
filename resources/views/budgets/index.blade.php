@@ -50,8 +50,12 @@
                                     </span>
                                     <span class="text-sm font-semibold tabular-nums">{{ $pct }}%</span>
                                 </div>
+                                @php
+                                    $barColor = $pct >= 100 ? 'bg-app-negative' : ($pct >= 80 ? 'bg-app-warning' : 'bg-app-positive');
+                                    $barTone  = $pct >= 100 ? 'progress-danger' : ($pct >= 80 ? 'progress-warning' : 'progress-success');
+                                @endphp
                                 <div class="w-full h-2 rounded-full bg-app-bg-soft overflow-hidden">
-                                    <div class="progress-bar h-full rounded-full bg-app-positive"
+                                    <div class="progress-bar h-full rounded-full {{ $barColor }} {{ $barTone }}"
                                          style="width: {{ min(100, $pct) }}%"></div>
                                 </div>
                             </td>
