@@ -89,4 +89,50 @@ class BudgetController extends Controller
             'year' => $budget->year,
         ]);
     }
+
+    public function copyPrevious(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:2020|max:2100',
+        ]);
+
+        $month = (int) $data['month'];
+        $year = (int) $data['year'];
+
+        $prevMonth = $month === 1 ? 12 : $month - 1;
+        $prevYear = $month === 1 ? $year - 1 : $year;
+
+        $previous = $request->user()->budgets()
+            ->where('month', $prevMonth)
+            ->where('year', $prevYear)
+            ->get();
+
+        if ($previous->isEmpty()) {
+            return redirect()->route('budgets.index', ['month' => $month, 'year' => $year])
+                ->with('error', 'Prethodni mesec nema budzete za kopiranje.');
+        }
+
+        $copied = 0;
+        foreach ($previous as $prev) {
+            $exists = $request->user()->budgets()
+                ->where('category_id', $prev->category_id)
+                ->where('month', $month)
+                ->where('year', $year)
+                ->exists();
+
+            if (! $exists) {
+                $request->user()->budgets()->create([
+                    'category_id' => $prev->category_id,
+                    'limit_amount' => $prev->limit_amount,
+                    'month' => $month,
+                    'year' => $year,
+                ]);
+                $copied++;
+            }
+        }
+
+        return redirect()->route('budgets.index', ['month' => $month, 'year' => $year])
+            ->with('success', "Kopirano je {$copied} budzeta iz prethodnog meseca.");
+    }
 }
