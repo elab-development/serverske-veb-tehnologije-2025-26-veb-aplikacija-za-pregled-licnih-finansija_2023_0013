@@ -7,10 +7,20 @@
 <x-app-layout>
     <x-slot name="header">
         <h1 class="text-2xl font-semibold">Budzeti</h1>
-        <button type="button" @click="$dispatch('open-budget-modal')"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-app-accent hover:bg-app-accent-hov text-white rounded-lg text-sm font-medium new-budget-btn">
-            <i class="bi bi-plus-lg"></i> Novi budzet
-        </button>
+        <div class="flex items-center gap-2">
+            <form method="POST" action="{{ route('budgets.copy-previous') }}" class="inline">
+                @csrf
+                <input type="hidden" name="month" value="{{ $month }}">
+                <input type="hidden" name="year" value="{{ $year }}">
+                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 border border-app-border rounded-lg text-sm hover:bg-app-bg-soft copy-previous-btn">
+                    <i class="bi bi-arrow-counterclockwise"></i> Kopiraj iz prethodnog
+                </button>
+            </form>
+            <button type="button" @click="$dispatch('open-budget-modal')"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-app-accent hover:bg-app-accent-hov text-white rounded-lg text-sm font-medium new-budget-btn">
+                <i class="bi bi-plus-lg"></i> Novi budzet
+            </button>
+        </div>
     </x-slot>
 
     @include('budgets._modal', ['expenseCategories' => $expenseCategories, 'month' => $month, 'year' => $year])
