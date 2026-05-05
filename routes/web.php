@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('transactions', TransactionController::class)->except(['create', 'edit']);
+    Route::resource('budgets', BudgetController::class)->except(['show', 'create', 'edit']);
+    Route::post('/budgets/copy-previous', [BudgetController::class, 'copyPrevious'])->name('budgets.copy-previous');
 });
 
 require __DIR__.'/auth.php';
