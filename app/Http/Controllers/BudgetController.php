@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BudgetRequest;
 use App\Models\Budget;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
@@ -30,18 +31,13 @@ class BudgetController extends Controller
         return view('budgets.index', compact('budgets', 'expenseCategories', 'month', 'year'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(BudgetRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'category_id' => 'required|integer',
-            'limit_amount' => 'required|numeric|min:0.01',
-            'month' => 'required|integer|between:1,12',
-            'year' => 'required|integer|min:2020|max:2100',
-        ]);
-
+        $data = $request->validated();
         $request->user()->budgets()->create($data);
 
-        return redirect()->route('budgets.index', ['month' => $data['month'], 'year' => $data['year']]);
+        return redirect()->route('budgets.index', ['month' => $data['month'], 'year' => $data['year']])
+            ->with('success', 'Budzet je dodat.');
     }
 
     public function update(Request $request, Budget $budget): RedirectResponse
