@@ -12,6 +12,23 @@ class ReportController extends Controller
         $from = $request->query('from', now()->startOfMonth()->subMonth()->format('Y-m-d'));
         $to = $request->query('to', now()->format('Y-m-d'));
 
-        return view('reports.index', compact('from', 'to'));
+        $user = $request->user();
+
+        $summary = $user->transactions()
+            ->whereBetween('transaction_date', [$from, $to])
+            ->with('category')
+            ->get()
+            ->groupBy('category_id')
+            ->map(fn ($txs) => [
+                'category' => $txs->first()->category->name,
+                'type' => $txs->first()->category->type,
+                'color' => $txs->first()->category->color,
+                'count' => $txs->count(),
+                'total' => (float) $txs->sum('amount'),
+            ])
+            ->sortByDesc('total')
+            ->values();
+
+        return view('reports.index', compact('from', 'to', 'summary'));
     }
 }
