@@ -25,6 +25,12 @@
                     <canvas id="categoryBarChart"></canvas>
                 </div>
             </div>
+            <div class="bg-white border border-app-border rounded-xl p-5">
+                <h2 class="text-sm font-semibold mb-3">Kretanje bilansa</h2>
+                <div class="h-72">
+                    <canvas id="balanceLineChart"></canvas>
+                </div>
+            </div>
         </div>
     @endif
 
@@ -82,6 +88,24 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } },
             });
+
+            const timeline = @json($balanceTimeline);
+            if (timeline.length > 0) {
+                new Chart(document.getElementById('balanceLineChart'), {
+                    type: 'line',
+                    data: {
+                        labels: timeline.map(t => t.date),
+                        datasets: [{
+                            label: 'Bilans',
+                            data: timeline.map(t => t.balance),
+                            borderColor: '#2563EB',
+                            backgroundColor: '#2563EB20',
+                            tension: 0.3,
+                        }],
+                    },
+                    options: { responsive: true, maintainAspectRatio: false },
+                });
+            }
         });
     </script>
 </x-app-layout>

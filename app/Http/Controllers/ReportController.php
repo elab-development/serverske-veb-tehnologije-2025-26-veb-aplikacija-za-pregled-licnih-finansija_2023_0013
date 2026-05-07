@@ -29,6 +29,24 @@ class ReportController extends Controller
             ->sortByDesc('total')
             ->values();
 
-        return view('reports.index', compact('from', 'to', 'summary'));
+        $balanceSeries = $user->transactions()
+            ->whereBetween('transaction_date', [$from, $to])
+            ->orderBy('transaction_date')
+            ->get(['transaction_date', 'amount', 'type'])
+            ->groupBy(fn ($t) => $t->transaction_date->format('Y-m-d'))
+            ->map(function ($dayTxs) {
+                $income = (float) $dayTxs->where('type', 'income')->sum('amount');
+                $expense = (float) $dayTxs->where('type', 'expense')->sum('amount');
+                return $income - $expense;
+            });
+
+        $cumulative = 0;
+        $balanceTimeline = collect();
+        foreach ($balanceSeries as $date => $delta) {
+            $cumulative += $delta;
+            $balanceTimeline->push(['date' => $date, 'balance' => $cumulative]);
+        }
+
+        return view('reports.index', compact('from', 'to', 'summary', 'balanceTimeline'));
     }
 }
