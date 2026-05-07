@@ -31,7 +31,12 @@
                 @isset($header)
                     <header class="bg-white border-b border-app-border">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-                            {{ $header }}
+                            <div class="flex items-center gap-4 flex-1 justify-between">
+                                {{ $header }}
+                            </div>
+                            @auth
+                                @include('layouts._notifications-bell')
+                            @endauth
                         </div>
                     </header>
                 @endisset
