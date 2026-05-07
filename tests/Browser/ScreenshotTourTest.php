@@ -43,7 +43,7 @@ class ScreenshotTourTest extends DuskTestCase
 
         $user->notify(new \App\Notifications\BudgetThresholdNotification($kirijaBudget, 80, 25500));
 
-        $dan = (int) (env('SCREENSHOT_DAN') ?? 7);
+        $dan = (int) (env('SCREENSHOT_DAN') ?? 8);
 
         $viewports = [
             'mobile' => [375, 667],
@@ -60,6 +60,7 @@ class ScreenshotTourTest extends DuskTestCase
             'transakcije' => '/transactions',
             'transakcije-filter' => '/transactions?type=income',
             'budzeti' => '/budgets',
+            'izvestaji' => '/reports',
             'podesavanja' => '/profile',
         ];
 
@@ -68,7 +69,7 @@ class ScreenshotTourTest extends DuskTestCase
                 $browser->resize($w, $h);
 
                 foreach ($pages as $name => $url) {
-                    if (str_starts_with($url, '/dashboard') || str_starts_with($url, '/categories') || str_starts_with($url, '/transactions') || str_starts_with($url, '/budgets') || str_starts_with($url, '/profile')) {
+                    if (str_starts_with($url, '/dashboard') || str_starts_with($url, '/categories') || str_starts_with($url, '/transactions') || str_starts_with($url, '/budgets') || str_starts_with($url, '/reports') || str_starts_with($url, '/profile')) {
                         $browser->loginAs($user);
                     } else {
                         $browser->logout();
