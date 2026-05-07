@@ -17,6 +17,17 @@
         </button>
     </form>
 
+    @if ($summary->isNotEmpty())
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white border border-app-border rounded-xl p-5">
+                <h2 class="text-sm font-semibold mb-3">Po kategorijama</h2>
+                <div class="h-72">
+                    <canvas id="categoryBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="bg-white border border-app-border rounded-xl overflow-hidden mb-6 report-summary">
         <div class="px-5 py-3 border-b border-app-border bg-app-bg-soft">
             <h2 class="text-sm font-semibold">Rezime po kategorijama</h2>
@@ -53,4 +64,24 @@
             </table>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const summary = @json($summary);
+            if (typeof Chart === 'undefined' || summary.length === 0) return;
+
+            new Chart(document.getElementById('categoryBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: summary.map(r => r.category),
+                    datasets: [{
+                        label: 'Iznos',
+                        data: summary.map(r => r.total),
+                        backgroundColor: summary.map(r => r.color),
+                    }],
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } },
+            });
+        });
+    </script>
 </x-app-layout>
