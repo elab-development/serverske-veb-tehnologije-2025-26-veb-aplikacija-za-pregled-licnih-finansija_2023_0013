@@ -40,6 +40,19 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
+    public function updateNotifications(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email_notifications' => 'nullable|boolean',
+        ]);
+
+        $request->user()->update([
+            'email_notifications' => (bool) $request->boolean('email_notifications'),
+        ]);
+
+        return Redirect::route('profile.edit')->with('success', 'Podesavanja notifikacija su sacuvana.');
+    }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
