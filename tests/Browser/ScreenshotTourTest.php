@@ -33,7 +33,7 @@ class ScreenshotTourTest extends DuskTestCase
             'month' => now()->month,
             'year' => now()->year,
         ]);
-        \App\Models\Budget::create([
+        $kirijaBudget = \App\Models\Budget::create([
             'user_id' => $user->id,
             'category_id' => $kirija->id,
             'limit_amount' => 30000,
@@ -41,7 +41,9 @@ class ScreenshotTourTest extends DuskTestCase
             'year' => now()->year,
         ]);
 
-        $dan = (int) (env('SCREENSHOT_DAN') ?? 6);
+        $user->notify(new \App\Notifications\BudgetThresholdNotification($kirijaBudget, 80, 25500));
+
+        $dan = (int) (env('SCREENSHOT_DAN') ?? 7);
 
         $viewports = [
             'mobile' => [375, 667],
