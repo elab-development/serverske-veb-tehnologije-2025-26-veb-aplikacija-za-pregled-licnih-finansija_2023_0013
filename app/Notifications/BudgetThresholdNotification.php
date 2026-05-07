@@ -21,7 +21,7 @@ class BudgetThresholdNotification extends Notification
     public function via(object $notifiable): array
     {
         $channels = ['database'];
-        if ($notifiable->email_notifications) {
+        if (! empty($notifiable->email) && $notifiable->email_notifications) {
             $channels[] = 'mail';
         }
         return $channels;
