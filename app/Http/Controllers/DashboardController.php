@@ -50,6 +50,26 @@ class DashboardController extends Controller
             ])
             ->values();
 
-        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses'));
+        $monthlySeries = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $income = (float) $user->transactions()
+                ->where('type', Transaction::TYPE_INCOME)
+                ->whereYear('transaction_date', $date->year)
+                ->whereMonth('transaction_date', $date->month)
+                ->sum('amount');
+            $expense = (float) $user->transactions()
+                ->where('type', Transaction::TYPE_EXPENSE)
+                ->whereYear('transaction_date', $date->year)
+                ->whereMonth('transaction_date', $date->month)
+                ->sum('amount');
+            $monthlySeries->push([
+                'label' => $date->translatedFormat('M Y'),
+                'income' => $income,
+                'expense' => $expense,
+            ]);
+        }
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries'));
     }
 }

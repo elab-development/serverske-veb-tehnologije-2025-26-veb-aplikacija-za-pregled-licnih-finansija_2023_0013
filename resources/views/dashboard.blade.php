@@ -37,12 +37,22 @@
                 <canvas id="categoryDonutChart"></canvas>
             </div>
         </div>
+        <div class="bg-white border border-app-border rounded-xl p-5">
+            <h2 class="text-sm font-semibold mb-3">Prihodi vs Rashodi (6 meseci)</h2>
+            <div class="h-64">
+                <canvas id="monthlyLineChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const data = @json($categoryExpenses);
-            if (typeof Chart !== 'undefined' && data.length > 0) {
+            const monthly = @json($monthlySeries);
+
+            if (typeof Chart === 'undefined') return;
+
+            if (data.length > 0) {
                 new Chart(document.getElementById('categoryDonutChart'), {
                     type: 'doughnut',
                     data: {
@@ -59,6 +69,18 @@
                     },
                 });
             }
+
+            new Chart(document.getElementById('monthlyLineChart'), {
+                type: 'line',
+                data: {
+                    labels: monthly.map(m => m.label),
+                    datasets: [
+                        { label: 'Prihodi', data: monthly.map(m => m.income), borderColor: '#16A34A', backgroundColor: '#16A34A20', tension: 0.3 },
+                        { label: 'Rashodi', data: monthly.map(m => m.expense), borderColor: '#DC2626', backgroundColor: '#DC262620', tension: 0.3 },
+                    ],
+                },
+                options: { responsive: true, maintainAspectRatio: false },
+            });
         });
     </script>
 </x-app-layout>
