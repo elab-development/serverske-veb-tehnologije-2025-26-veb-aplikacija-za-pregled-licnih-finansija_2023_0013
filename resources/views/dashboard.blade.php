@@ -47,6 +47,34 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white border border-app-border rounded-xl p-5">
+            <h2 class="text-sm font-semibold mb-3">Status budzeta</h2>
+            @if ($activeBudgets->isEmpty())
+                <div class="text-app-text-muted text-sm py-6 text-center">Nemate aktivnih budzeta za ovaj mesec.</div>
+            @else
+                <div class="space-y-3 budget-status-section">
+                    @foreach ($activeBudgets as $budget)
+                        @php
+                            $spent = $budget->spentAmount();
+                            $pct = $budget->percentSpent();
+                            $color = $pct >= 100 ? 'bg-app-negative' : ($pct >= 80 ? 'bg-app-warning' : 'bg-app-positive');
+                        @endphp
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-medium">{{ $budget->category->name }}</span>
+                                <span class="tabular-nums text-app-text-muted">
+                                    {{ number_format($spent, 0, ',', '.') }} / {{ number_format($budget->limit_amount, 0, ',', '.') }} ({{ $pct }}%)
+                                </span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-app-bg-soft">
+                                <div class="h-full rounded-full {{ $color }}" style="width: {{ min(100, $pct) }}%"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <div class="bg-white border border-app-border rounded-xl p-5">
             <h2 class="text-sm font-semibold mb-3">Poslednje transakcije</h2>
             @if ($latestTransactions->isEmpty())
                 <div class="text-app-text-muted text-sm py-6 text-center">Nemate transakcija.</div>

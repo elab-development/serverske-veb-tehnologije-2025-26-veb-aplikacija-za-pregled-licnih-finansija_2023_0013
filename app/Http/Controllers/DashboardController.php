@@ -77,6 +77,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries', 'latestTransactions'));
+        $activeBudgets = $user->budgets()
+            ->with('category')
+            ->where('month', now()->month)
+            ->where('year', now()->year)
+            ->get();
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries', 'latestTransactions', 'activeBudgets'));
     }
 }
