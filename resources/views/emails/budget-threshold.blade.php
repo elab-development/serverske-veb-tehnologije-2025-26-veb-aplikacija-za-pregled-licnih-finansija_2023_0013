@@ -1,5 +1,7 @@
 @component('mail::message')
-# Upozorenje o budzetu
+# 💰 Licne finansije
+
+## Upozorenje o budzetu
 
 Pozdrav, **{{ $user->name }}**,
 
