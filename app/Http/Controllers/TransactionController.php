@@ -80,10 +80,10 @@ class TransactionController extends Controller
         $limit = (float) $budget->limit_amount;
         $pct = $limit > 0 ? ($spent / $limit) * 100 : 0;
 
-        if ($pct >= 100) {
+        if ($pct >= 100 && ! $budget->notified_100) {
             $user->notify(new BudgetThresholdNotification($budget, 100, $spent));
             $budget->update(['notified_100' => true, 'notified_80' => true]);
-        } elseif ($pct >= 80) {
+        } elseif ($pct >= 80 && $pct < 100 && ! $budget->notified_80) {
             $user->notify(new BudgetThresholdNotification($budget, 80, $spent));
             $budget->update(['notified_80' => true]);
         }
