@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('transactions', TransactionController::class)->except(['create', 'edit']);
     Route::resource('budgets', BudgetController::class)->except(['create', 'edit']);
     Route::post('/budgets/copy-previous', [BudgetController::class, 'copyPrevious'])->name('budgets.copy-previous');
+
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 });
 
 require __DIR__.'/auth.php';
