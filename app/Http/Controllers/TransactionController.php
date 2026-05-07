@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
+use App\Models\Budget;
 use App\Models\Transaction;
+use App\Notifications\BudgetThresholdNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -53,9 +55,36 @@ class TransactionController extends Controller
             return back()->withErrors(['category_id' => 'Kategorija ne odgovara tipu transakcije.'])->withInput();
         }
 
-        $request->user()->transactions()->create($data);
+        $tx = $request->user()->transactions()->create($data);
+
+        if ($tx->type === Transaction::TYPE_EXPENSE) {
+            $this->checkBudgetThresholds($request->user(), $tx);
+        }
 
         return redirect()->route('transactions.index')->with('success', 'Transakcija je dodata.');
+    }
+
+    private function checkBudgetThresholds($user, Transaction $tx): void
+    {
+        $budget = $user->budgets()
+            ->where('category_id', $tx->category_id)
+            ->where('month', (int) $tx->transaction_date->format('n'))
+            ->where('year', (int) $tx->transaction_date->format('Y'))
+            ->first();
+
+        if (! $budget) {
+            return;
+        }
+
+        $spent = (float) $budget->spentAmount();
+        $limit = (float) $budget->limit_amount;
+        $pct = $limit > 0 ? ($spent / $limit) * 100 : 0;
+
+        if ($pct >= 100) {
+            $user->notify(new BudgetThresholdNotification($budget, 100, $spent));
+        } elseif ($pct >= 80) {
+            $user->notify(new BudgetThresholdNotification($budget, 80, $spent));
+        }
     }
 
     public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
