@@ -28,6 +28,14 @@ class DashboardController extends Controller
             ->whereMonth('transaction_date', now()->month)
             ->sum('amount');
 
-        return view('dashboard', compact('balance', 'monthIncome'));
+        $monthExpense = (float) $user->transactions()
+            ->where('type', Transaction::TYPE_EXPENSE)
+            ->whereYear('transaction_date', now()->year)
+            ->whereMonth('transaction_date', now()->month)
+            ->sum('amount');
+
+        $monthSavings = $monthIncome - $monthExpense;
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings'));
     }
 }
