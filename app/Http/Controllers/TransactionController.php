@@ -82,8 +82,10 @@ class TransactionController extends Controller
 
         if ($pct >= 100) {
             $user->notify(new BudgetThresholdNotification($budget, 100, $spent));
+            $budget->update(['notified_100' => true]);
         } elseif ($pct >= 80) {
             $user->notify(new BudgetThresholdNotification($budget, 80, $spent));
+            $budget->update(['notified_80' => true]);
         }
     }
 
