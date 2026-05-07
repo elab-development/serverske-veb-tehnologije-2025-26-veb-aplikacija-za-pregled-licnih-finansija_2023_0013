@@ -70,6 +70,13 @@ class DashboardController extends Controller
             ]);
         }
 
-        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries'));
+        $latestTransactions = $user->transactions()
+            ->with('category')
+            ->orderByDesc('transaction_date')
+            ->orderByDesc('id')
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries', 'latestTransactions'));
     }
 }

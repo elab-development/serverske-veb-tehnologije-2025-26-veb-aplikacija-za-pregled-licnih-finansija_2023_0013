@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="bg-white border border-app-border rounded-xl p-5">
             <h2 class="text-sm font-semibold mb-3">Rashodi po kategorijama (ovaj mesec)</h2>
             <div class="h-64">
@@ -42,6 +42,32 @@
             <div class="h-64">
                 <canvas id="monthlyLineChart"></canvas>
             </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white border border-app-border rounded-xl p-5">
+            <h2 class="text-sm font-semibold mb-3">Poslednje transakcije</h2>
+            @if ($latestTransactions->isEmpty())
+                <div class="text-app-text-muted text-sm py-6 text-center">Nemate transakcija.</div>
+            @else
+                <div class="divide-y divide-app-border">
+                    @foreach ($latestTransactions as $tx)
+                        <div class="flex items-center gap-3 py-3 transaction-row">
+                            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm" style="background-color: {{ $tx->category->color }}">
+                                <i class="bi {{ $tx->category->icon ?? 'bi-tag' }}"></i>
+                            </span>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-sm truncate">{{ $tx->category->name }}</div>
+                                <div class="text-xs text-app-text-muted">{{ $tx->transaction_date->format('d.m.Y') }}</div>
+                            </div>
+                            <span class="text-sm font-semibold tabular-nums {{ $tx->type === 'income' ? 'text-app-positive' : 'text-app-negative' }}">
+                                {{ $tx->type === 'income' ? '+' : '-' }}{{ number_format($tx->amount, 0, ',', '.') }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 
