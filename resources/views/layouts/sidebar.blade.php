@@ -12,7 +12,7 @@
     </div>
 
     <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
-        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('dashboard') ? 'bg-app-bg-soft font-medium' : '' }}">
             <i class="bi bi-grid"></i><span>Dashboard</span>
         </a>
         <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('transactions.*') ? 'bg-app-bg-soft font-medium' : '' }}">
