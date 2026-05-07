@@ -36,6 +36,20 @@ class DashboardController extends Controller
 
         $monthSavings = $monthIncome - $monthExpense;
 
-        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings'));
+        $categoryExpenses = $user->transactions()
+            ->where('type', Transaction::TYPE_EXPENSE)
+            ->whereYear('transaction_date', now()->year)
+            ->whereMonth('transaction_date', now()->month)
+            ->with('category')
+            ->get()
+            ->groupBy('category_id')
+            ->map(fn ($txs) => [
+                'name' => $txs->first()->category->name,
+                'color' => $txs->first()->category->color,
+                'total' => (float) $txs->sum('amount'),
+            ])
+            ->values();
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses'));
     }
 }
