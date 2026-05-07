@@ -30,7 +30,15 @@ class BudgetThresholdNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Upozorenje o budzetu - ' . $this->budget->category->name);
+            ->subject('Upozorenje o budzetu - ' . $this->budget->category->name)
+            ->greeting('Pozdrav, ' . $notifiable->name . '!')
+            ->line($this->messageLine())
+            ->line(sprintf(
+                'Potroseno: %s RSD od %s RSD limita.',
+                number_format($this->spent, 2, ',', '.'),
+                number_format($this->budget->limit_amount, 2, ',', '.'),
+            ))
+            ->action('Pregledaj budzete', url('/budgets'));
     }
 
     public function toArray(object $notifiable): array
@@ -42,6 +50,14 @@ class BudgetThresholdNotification extends Notification
             'threshold' => $this->threshold,
             'limit_amount' => (float) $this->budget->limit_amount,
             'spent' => $this->spent,
+            'message' => $this->messageLine(),
         ];
+    }
+
+    private function messageLine(): string
+    {
+        return $this->threshold >= 100
+            ? "Presli ste mesecni budzet za kategoriju \"{$this->budget->category->name}\"."
+            : "Potrosili ste preko 80% mesecnog budzeta za kategoriju \"{$this->budget->category->name}\".";
     }
 }
