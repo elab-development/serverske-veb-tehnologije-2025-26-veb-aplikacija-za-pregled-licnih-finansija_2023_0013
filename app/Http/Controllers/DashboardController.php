@@ -22,6 +22,12 @@ class DashboardController extends Controller
 
         $balance = $totalIncome - $totalExpense;
 
-        return view('dashboard', compact('balance'));
+        $monthIncome = (float) $user->transactions()
+            ->where('type', Transaction::TYPE_INCOME)
+            ->whereYear('transaction_date', now()->year)
+            ->whereMonth('transaction_date', now()->month)
+            ->sum('amount');
+
+        return view('dashboard', compact('balance', 'monthIncome'));
     }
 }
