@@ -30,6 +30,13 @@
         <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft">
             <i class="bi bi-gear"></i><span>Podesavanja</span>
         </a>
+        @auth
+            @if (auth()->user()->isAdmin())
+                <a href="{{ route('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-app-text hover:bg-app-bg-soft {{ request()->routeIs('admin.*') ? 'bg-app-bg-soft font-medium' : '' }}">
+                    <i class="bi bi-shield-lock"></i><span>Admin</span>
+                </a>
+            @endif
+        @endauth
     </nav>
 
     <div class="p-3 border-t border-app-border">
