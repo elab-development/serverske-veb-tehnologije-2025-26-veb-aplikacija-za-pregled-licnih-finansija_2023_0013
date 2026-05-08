@@ -75,7 +75,8 @@ class ReportController extends Controller
             ->sortByDesc('total')
             ->values();
 
-        $pdf = Pdf::loadView('reports.pdf', compact('user', 'transactions', 'summary', 'from', 'to'));
+        $pdf = Pdf::loadView('reports.pdf', compact('user', 'transactions', 'summary', 'from', 'to'))
+            ->setPaper('a4', 'portrait');
 
         return $pdf->download('izvestaj-' . $from . '-' . $to . '.pdf');
     }
