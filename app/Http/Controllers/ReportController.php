@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReportController extends Controller
 {
@@ -48,5 +50,33 @@ class ReportController extends Controller
         }
 
         return view('reports.index', compact('from', 'to', 'summary', 'balanceTimeline'));
+    }
+
+    public function exportPdf(Request $request): Response
+    {
+        $from = $request->query('from', now()->startOfMonth()->subMonth()->format('Y-m-d'));
+        $to = $request->query('to', now()->format('Y-m-d'));
+        $user = $request->user();
+
+        $transactions = $user->transactions()
+            ->whereBetween('transaction_date', [$from, $to])
+            ->with('category')
+            ->orderBy('transaction_date')
+            ->get();
+
+        $summary = $transactions
+            ->groupBy('category_id')
+            ->map(fn ($txs) => [
+                'category' => $txs->first()->category->name,
+                'type' => $txs->first()->category->type,
+                'count' => $txs->count(),
+                'total' => (float) $txs->sum('amount'),
+            ])
+            ->sortByDesc('total')
+            ->values();
+
+        $pdf = Pdf::loadView('reports.pdf', compact('user', 'transactions', 'summary', 'from', 'to'));
+
+        return $pdf->download('izvestaj-' . $from . '-' . $to . '.pdf');
     }
 }
