@@ -36,4 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/export/excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
 });
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    //
+});
+
 require __DIR__.'/auth.php';
