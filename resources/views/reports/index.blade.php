@@ -1,6 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h1 class="text-2xl font-semibold">Izvestaji</h1>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('reports.export.pdf', ['from' => $from, 'to' => $to]) }}"
+               class="inline-flex items-center gap-2 px-4 py-2 border border-app-border rounded-lg text-sm hover:bg-app-bg-soft export-pdf-btn">
+                <i class="bi bi-file-earmark-pdf"></i> PDF
+            </a>
+        </div>
     </x-slot>
 
     <form method="GET" action="{{ route('reports.index') }}" class="bg-white border border-app-border rounded-xl p-4 mb-6 flex items-end gap-3 flex-wrap report-filter">
