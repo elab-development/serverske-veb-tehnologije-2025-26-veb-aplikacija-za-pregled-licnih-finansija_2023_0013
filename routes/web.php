@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -37,7 +38,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    //
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::post('/users/{user}/toggle', [AdminController::class, 'toggleActive'])->name('users.toggle');
 });
 
 require __DIR__.'/auth.php';
