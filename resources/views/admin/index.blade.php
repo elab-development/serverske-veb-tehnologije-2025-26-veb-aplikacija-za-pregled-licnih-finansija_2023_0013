@@ -15,6 +15,7 @@
                     <th class="text-left px-5 py-2 font-medium">Registrovan</th>
                     <th class="text-right px-5 py-2 font-medium">Br. tx</th>
                     <th class="text-left px-5 py-2 font-medium">Status</th>
+                    <th class="text-right px-5 py-2 font-medium">Akcija</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-app-border">
@@ -28,6 +29,16 @@
                             <span class="inline-block px-2 py-0.5 rounded text-xs {{ $u->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} user-status">
                                 {{ $u->is_active ? 'Aktivan' : 'Deaktiviran' }}
                             </span>
+                        </td>
+                        <td class="px-5 py-2 text-right">
+                            @if ($u->id !== auth()->id())
+                                <form method="POST" action="{{ route('admin.users.toggle', $u) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-app-accent hover:underline toggle-active-btn">
+                                        {{ $u->is_active ? 'Deaktiviraj' : 'Reaktiviraj' }}
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
