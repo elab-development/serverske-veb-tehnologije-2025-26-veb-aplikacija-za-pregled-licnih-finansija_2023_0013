@@ -6,6 +6,10 @@
                class="inline-flex items-center gap-2 px-4 py-2 border border-app-border rounded-lg text-sm hover:bg-app-bg-soft export-pdf-btn">
                 <i class="bi bi-file-earmark-pdf"></i> PDF
             </a>
+            <a href="{{ route('reports.export.excel', ['from' => $from, 'to' => $to]) }}"
+               class="inline-flex items-center gap-2 px-4 py-2 border border-app-border rounded-lg text-sm hover:bg-app-bg-soft export-excel-btn">
+                <i class="bi bi-file-earmark-excel"></i> Excel
+            </a>
         </div>
     </x-slot>
 

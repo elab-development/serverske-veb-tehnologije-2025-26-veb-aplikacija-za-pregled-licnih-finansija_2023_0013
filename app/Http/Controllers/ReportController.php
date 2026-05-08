@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransactionsExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReportController extends Controller
@@ -79,5 +81,13 @@ class ReportController extends Controller
             ->setPaper('a4', 'portrait');
 
         return $pdf->download('izvestaj-' . $from . '-' . $to . '.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $from = $request->query('from', now()->startOfMonth()->subMonth()->format('Y-m-d'));
+        $to = $request->query('to', now()->format('Y-m-d'));
+
+        return new TransactionsExport($request->user(), $from, $to);
     }
 }
