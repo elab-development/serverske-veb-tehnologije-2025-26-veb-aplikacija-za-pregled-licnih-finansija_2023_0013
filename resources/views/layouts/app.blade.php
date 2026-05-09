@@ -48,6 +48,8 @@
                         {{ $slot }}
                     </div>
                 </main>
+
+                @include('layouts._toast')
             </div>
         </div>
     </body>
