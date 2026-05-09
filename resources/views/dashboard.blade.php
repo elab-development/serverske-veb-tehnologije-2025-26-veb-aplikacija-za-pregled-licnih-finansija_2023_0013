@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-semibold">Dashboard</h1>
     </x-slot>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div class="kpi-card bg-white border border-app-border rounded-xl p-4 sm:p-5 shadow-sm">
             <div class="text-xs uppercase text-app-text-muted mb-1">Bilans</div>
             <div class="text-2xl font-semibold tabular-nums {{ $balance >= 0 ? 'text-app-text' : 'text-app-negative' }}">
