@@ -49,7 +49,10 @@
         <div class="bg-white border border-app-border rounded-xl p-5">
             <h2 class="text-sm font-semibold mb-3">Status budzeta</h2>
             @if ($activeBudgets->isEmpty())
-                <div class="text-app-text-muted text-sm py-6 text-center">Nemate aktivnih budzeta za ovaj mesec.</div>
+                <div class="text-app-text-muted text-sm py-8 text-center empty-state">
+                    <i class="bi bi-piggy-bank text-3xl block mb-2"></i>
+                    Nemate aktivnih budzeta za ovaj mesec.
+                </div>
             @else
                 <div class="space-y-3 budget-status-section">
                     @foreach ($activeBudgets as $budget)
@@ -77,7 +80,10 @@
         <div class="bg-white border border-app-border rounded-xl p-5">
             <h2 class="text-sm font-semibold mb-3">Poslednje transakcije</h2>
             @if ($latestTransactions->isEmpty())
-                <div class="text-app-text-muted text-sm py-6 text-center">Nemate transakcija.</div>
+                <div class="text-app-text-muted text-sm py-8 text-center empty-state">
+                    <i class="bi bi-inbox text-3xl block mb-2"></i>
+                    Nemate transakcija.
+                </div>
             @else
                 <div class="divide-y divide-app-border">
                     @foreach ($latestTransactions as $tx)
