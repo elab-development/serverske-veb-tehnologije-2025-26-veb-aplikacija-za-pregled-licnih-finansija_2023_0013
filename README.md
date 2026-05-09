@@ -18,16 +18,41 @@ nauka.
 - maatwebsite/excel (Excel eksport)
 - Laravel Dusk (browser testovi)
 
+## Sistemski preduslovi
+
+- PHP 8.2+
+- Composer 2.x
+- Node 18+ i npm
+- MySQL 8 (XAMPP ili lokalna instalacija)
+- Chrome/Chromium (za Dusk testove)
+
 ## Instalacija
 
 ```bash
+# 1. Klonirati repo i instalirati zavisnosti
 composer install
 npm install
+
+# 2. Kopirati env i generisati app key
 cp .env.example .env
 php artisan key:generate
-# konfigurisi DB_DATABASE, DB_USERNAME, DB_PASSWORD u .env
-php artisan migrate
+
+# 3. Konfigurisati bazu u .env
+# DB_DATABASE=licne_finansije
+# DB_USERNAME=root
+# DB_PASSWORD=
+
+# 4. Kreirati bazu u MySQL-u (npr. preko phpMyAdmin)
+# CREATE DATABASE licne_finansije;
+# CREATE DATABASE licne_finansije_test;  -- za Dusk testove
+
+# 5. Pokrenuti migracije i seedere
+php artisan migrate:fresh --seed
+
+# 6. Build assets
 npm run build
+
+# 7. Pokrenuti server
 php artisan serve
 ```
 
