@@ -31,8 +31,8 @@
 
                 @isset($header)
                     <header class="bg-white border-b border-app-border">
-                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-4 flex-1 justify-between">
+                        <div class="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 flex-wrap">
+                            <div class="flex items-center gap-4 flex-1 justify-between min-w-0">
                                 {{ $header }}
                             </div>
                             @auth
