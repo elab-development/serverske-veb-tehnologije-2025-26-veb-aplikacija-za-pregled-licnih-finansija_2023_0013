@@ -57,3 +57,16 @@ php artisan serve
 ```
 
 Aplikacija se otvara na http://127.0.0.1:8000.
+
+## Test kredencijali
+
+Posle `php artisan migrate:fresh --seed` automatski se kreiraju 3 naloga:
+
+| Email             | Lozinka      | Uloga    |
+| ----------------- | ------------ | -------- |
+| admin@test.com    | password123  | admin    |
+| marko@test.com    | password123  | korisnik |
+| ana@test.com      | password123  | korisnik |
+
+Svaki test korisnik dobija 8 default kategorija, 50 random transakcija u
+poslednjih 6 meseci i 4 budzeta za tekuci mesec.
