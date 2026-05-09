@@ -70,3 +70,59 @@ Posle `php artisan migrate:fresh --seed` automatski se kreiraju 3 naloga:
 
 Svaki test korisnik dobija 8 default kategorija, 50 random transakcija u
 poslednjih 6 meseci i 4 budzeta za tekuci mesec.
+
+## Struktura projekta
+
+```
+app/
+  Actions/
+    SeedDefaultCategories.php       # 8 default kategorija pri registraciji
+  Exports/
+    TransactionsExport.php          # Excel export
+  Http/
+    Controllers/
+      AdminController.php           # /admin panel
+      BudgetController.php          # CRUD budzeta + kopiranje
+      CategoryController.php        # CRUD kategorija
+      DashboardController.php       # KPI + grafici
+      NotificationController.php    # mark as read
+      ReportController.php          # /reports + PDF/Excel
+      TransactionController.php     # CRUD + filteri + sort
+    Middleware/
+      AdminMiddleware.php           # role=admin guard
+    Requests/                       # FormRequest validacije
+  Models/
+    Budget.php Category.php Transaction.php User.php
+  Notifications/
+    BudgetThresholdNotification.php # 80% i 100% upozorenja
+  Observers/
+    UserObserver.php                # seeduje kategorije pri registraciji
+  Policies/                         # ownership zaštita
+database/
+  migrations/   factories/   seeders/
+resources/
+  views/
+    admin/   budgets/   categories/  reports/  transactions/
+    layouts/   profile/
+    emails/budget-threshold.blade.php
+routes/
+  web.php   auth.php
+tests/
+  Browser/                          # Dusk testovi
+```
+
+## Pokretanje testova
+
+```bash
+# Pripremiti test bazu
+php artisan migrate:fresh --env=dusk.local
+
+# Pokrenuti server u jednom terminalu
+php artisan serve
+
+# Pokrenuti ChromeDriver u drugom
+vendor/laravel/dusk/bin/chromedriver-mac-arm --port=9515
+
+# Pokrenuti Dusk u trecem
+php artisan dusk
+```
