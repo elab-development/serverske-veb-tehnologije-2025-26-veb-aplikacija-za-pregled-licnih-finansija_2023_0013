@@ -8,7 +8,10 @@
         <div class="w-8 h-8 rounded-lg bg-app-accent text-white flex items-center justify-center">
             <i class="bi bi-wallet2"></i>
         </div>
-        <span class="text-lg font-semibold text-app-text">Licne finansije</span>
+        <span class="text-lg font-semibold text-app-text flex-1">Licne finansije</span>
+        <button @click="sidebarOpen = false" type="button" class="lg:hidden text-app-text-muted hover:text-app-text close-sidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
 
     <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
