@@ -92,8 +92,8 @@
                                     $barColor = $pct >= 100 ? 'bg-app-negative' : ($pct >= 80 ? 'bg-app-warning' : 'bg-app-positive');
                                     $barTone  = $pct >= 100 ? 'progress-danger' : ($pct >= 80 ? 'progress-warning' : 'progress-success');
                                 @endphp
-                                <div class="w-full h-2 rounded-full bg-app-bg-soft overflow-hidden">
-                                    <div class="progress-bar h-full rounded-full {{ $barColor }} {{ $barTone }}"
+                                <div class="w-full h-2.5 rounded-full bg-app-bg-soft overflow-hidden">
+                                    <div class="progress-bar h-full rounded-full transition-all {{ $barColor }} {{ $barTone }}"
                                          style="width: {{ min(100, $pct) }}%"></div>
                                 </div>
                             </td>
