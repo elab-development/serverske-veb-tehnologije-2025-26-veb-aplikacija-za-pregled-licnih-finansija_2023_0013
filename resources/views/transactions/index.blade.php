@@ -59,6 +59,7 @@
     </form>
 
     <div class="bg-white border border-app-border rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
         @if ($transactions->isEmpty())
             <div class="p-12 text-center text-app-text-muted empty-state">
                 <i class="bi bi-inbox text-4xl block mb-3"></i>
@@ -137,6 +138,7 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
 
             <div class="md:hidden divide-y divide-app-border">
                 @foreach ($transactions as $tx)
