@@ -12,9 +12,6 @@ Pozdrav, **{{ $user->name }}**,
 **Potroseno:** {{ number_format($spent, 2, ',', '.') }} RSD
 **Procenat:** {{ $percent }}%
 
-@component('mail::button', ['url' => $url])
-Pregledaj budzete
-@endcomponent
+[Pregledaj budzete]({{ $url }})
 
 Hvala sto koristite aplikaciju.
-@endcomponent
