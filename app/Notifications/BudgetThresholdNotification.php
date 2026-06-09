@@ -41,7 +41,7 @@ class BudgetThresholdNotification extends Notification
                 'limit' => (float) $this->budget->limit_amount,
                 'spent' => $this->spent,
                 'percent' => $percent,
-                'message' => $this->messageLine(),
+                'alert_message' => $this->messageLine(),
                 'url' => url('/budgets'),
             ]);
     }

@@ -5,7 +5,7 @@
 
 Pozdrav, **{{ $user->name }}**,
 
-{{ $message }}
+{{ $alert_message }}
 
 **Kategorija:** {{ $category->name }}
 **Limit:** {{ number_format($limit, 2, ',', '.') }} RSD
