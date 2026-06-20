@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\BudgetApiController;
 use App\Http\Controllers\Api\CategoryApiController;
+use App\Http\Controllers\Api\CryptoApiController;
 use App\Http\Controllers\Api\DashboardApiController;
+use App\Http\Controllers\Api\ExchangeRateApiController;
 use App\Http\Controllers\Api\ReportApiController;
 use App\Http\Controllers\Api\TransactionApiController;
 use Illuminate\Support\Facades\Route;
@@ -43,4 +45,15 @@ Route::middleware('api.auth')->group(function () {
 
     // Izvještaji
     Route::get('/reports', [ReportApiController::class, 'index']);
+
+    // Kursevi valuta (open.er-api.com)
+    Route::get('/exchange-rates',         [ExchangeRateApiController::class, 'index']);
+    Route::get('/exchange-rates/convert', [ExchangeRateApiController::class, 'convertBalance']);
+
+    // Kripto kursevi (CoinGecko)
+    Route::get('/crypto-prices', [CryptoApiController::class, 'index']);
+
+    // Ugnježdene rute — transakcije i budžeti po kategoriji
+    Route::get('/categories/{id}/transactions', [CategoryApiController::class, 'transactions']);
+    Route::get('/categories/{id}/budgets',      [CategoryApiController::class, 'budgets']);
 });
