@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BudgetResource;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\TransactionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -70,5 +72,37 @@ class CategoryApiController extends Controller
         $category->delete();
 
         return response()->json(['message' => 'Kategorija je obrisana.']);
+    }
+
+    public function transactions(Request $request, int $id): JsonResponse
+    {
+        $category = $request->user()->categories()->find($id);
+
+        if (! $category) {
+            return response()->json(['message' => 'Kategorija nije pronađena.'], 404);
+        }
+
+        $transactions = $category->transactions()->orderBy('transaction_date', 'desc')->paginate(15);
+
+        return response()->json([
+            'data'    => TransactionResource::collection($transactions),
+            'message' => 'OK',
+        ]);
+    }
+
+    public function budgets(Request $request, int $id): JsonResponse
+    {
+        $category = $request->user()->categories()->find($id);
+
+        if (! $category) {
+            return response()->json(['message' => 'Kategorija nije pronađena.'], 404);
+        }
+
+        $budgets = $category->budgets()->get();
+
+        return response()->json([
+            'data'    => BudgetResource::collection($budgets),
+            'message' => 'OK',
+        ]);
     }
 }
