@@ -17,13 +17,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@test.com',
             'password' => 'password123',
             'role' => User::ROLE_ADMIN,
+            'points' => 0,
         ]);
 
-        $this->seedTestUser('Marko Markovic', 'marko@test.com');
-        $this->seedTestUser('Ana Anic', 'ana@test.com');
+        $this->seedTestUser('Marko Markovic', 'marko@test.com', 150);
+        $this->seedTestUser('Ana Anic', 'ana@test.com', 620);
     }
 
-    private function seedTestUser(string $name, string $email): User
+    private function seedTestUser(string $name, string $email, int $points = 0): User
     {
         $user = User::factory()->create([
             'name' => $name,
@@ -46,6 +47,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->seedBudgetsFor($user);
+
+        // Transakcije seedovane iznad su preko TransactionObserver-a vec dodale poene,
+        // pa fiksiramo demo vrednost na kraju da prikaz na odbrani bude predvidiv.
+        $user->update(['points' => $points]);
 
         return $user;
     }

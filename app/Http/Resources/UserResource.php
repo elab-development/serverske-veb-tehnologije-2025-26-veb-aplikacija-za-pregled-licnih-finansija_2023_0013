@@ -16,6 +16,8 @@ class UserResource extends JsonResource
             'role'                => $this->role,
             'is_active'           => $this->is_active,
             'email_notifications' => $this->email_notifications,
+            'points'              => $this->points,
+            'level'               => $this->level,
             'created_at'          => $this->created_at?->toIso8601String(),
         ];
     }

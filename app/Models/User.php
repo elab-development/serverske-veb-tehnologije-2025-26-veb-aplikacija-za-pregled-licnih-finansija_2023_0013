@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_active', 'email_notifications', 'api_token'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_active', 'email_notifications', 'api_token', 'points'])]
 #[Hidden(['password', 'remember_token', 'api_token'])]
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
@@ -36,6 +36,45 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function getLevelAttribute(): string
+    {
+        return match (true) {
+            $this->points >= 600 => 'Finansijski heroj',
+            $this->points >= 300 => 'Finansijski ninja',
+            $this->points >= 100 => 'Štediša',
+            default => 'Početnik',
+        };
+    }
+
+    public function getNextLevelThresholdAttribute(): ?int
+    {
+        return match (true) {
+            $this->points < 100 => 100,
+            $this->points < 300 => 300,
+            $this->points < 600 => 600,
+            default => null,
+        };
+    }
+
+    public function getLevelProgressPercentAttribute(): float
+    {
+        $threshold = $this->next_level_threshold;
+
+        if ($threshold === null) {
+            return 100.0;
+        }
+
+        $previousThreshold = match ($threshold) {
+            100 => 0,
+            300 => 100,
+            600 => 300,
+        };
+
+        $progress = ($this->points - $previousThreshold) / ($threshold - $previousThreshold) * 100;
+
+        return round(min(100, max(0, $progress)), 2);
     }
 
     public function categories(): HasMany

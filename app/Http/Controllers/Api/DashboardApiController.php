@@ -46,13 +46,17 @@ class DashboardApiController extends Controller
 
         return response()->json([
             'data' => [
-                'balance'           => $balance,
-                'total_income'      => $totalIncome,
-                'total_expense'     => $totalExpense,
-                'month_income'      => $monthIncome,
-                'month_expense'     => $monthExpense,
-                'month_savings'     => $monthIncome - $monthExpense,
-                'category_expenses' => $categoryExpenses,
+                'balance'                => $balance,
+                'total_income'           => $totalIncome,
+                'total_expense'          => $totalExpense,
+                'month_income'           => $monthIncome,
+                'month_expense'          => $monthExpense,
+                'month_savings'          => $monthIncome - $monthExpense,
+                'category_expenses'      => $categoryExpenses,
+                'points'                 => $user->points,
+                'level'                  => $user->level,
+                'next_level_threshold'   => $user->next_level_threshold,
+                'level_progress_percent' => $user->level_progress_percent,
             ],
             'message' => 'OK',
         ]);

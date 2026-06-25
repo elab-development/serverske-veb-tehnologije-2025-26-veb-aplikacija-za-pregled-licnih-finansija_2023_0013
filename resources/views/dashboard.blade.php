@@ -3,6 +3,31 @@
         <h1 class="text-2xl font-semibold">Dashboard</h1>
     </x-slot>
 
+    <div class="bg-white border border-app-border rounded-xl p-4 sm:p-5 shadow-sm mb-6">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <div>
+                <div class="text-xs uppercase text-app-text-muted mb-1">Nivo</div>
+                <div class="text-lg font-semibold">🏆 {{ $level }}</div>
+            </div>
+            <div class="text-right">
+                <div class="text-xs uppercase text-app-text-muted mb-1">Poeni</div>
+                <div class="text-lg font-semibold tabular-nums">{{ number_format($points, 0, ',', '.') }} poena</div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="w-full h-1.5 rounded-full bg-app-bg-soft">
+                <div class="h-full rounded-full bg-app-positive" style="width: {{ $levelProgressPercent }}%"></div>
+            </div>
+            @if ($nextLevelThreshold !== null)
+                <div class="text-xs text-app-text-muted mt-1">
+                    Jos {{ number_format($nextLevelThreshold - $points, 0, ',', '.') }} poena do sledeceg nivoa
+                </div>
+            @else
+                <div class="text-xs text-app-text-muted mt-1">Dostigli ste najvisi nivo!</div>
+            @endif
+        </div>
+    </div>
+
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div class="kpi-card bg-white border border-app-border rounded-xl p-4 sm:p-5 shadow-sm">
             <div class="text-xs uppercase text-app-text-muted mb-1">Bilans</div>

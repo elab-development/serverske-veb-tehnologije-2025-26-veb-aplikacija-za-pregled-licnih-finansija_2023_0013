@@ -83,6 +83,11 @@ class DashboardController extends Controller
             ->where('year', now()->year)
             ->get();
 
-        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries', 'latestTransactions', 'activeBudgets'));
+        $points = $user->points;
+        $level = $user->level;
+        $nextLevelThreshold = $user->next_level_threshold;
+        $levelProgressPercent = $user->level_progress_percent;
+
+        return view('dashboard', compact('balance', 'monthIncome', 'monthExpense', 'monthSavings', 'categoryExpenses', 'monthlySeries', 'latestTransactions', 'activeBudgets', 'points', 'level', 'nextLevelThreshold', 'levelProgressPercent'));
     }
 }
